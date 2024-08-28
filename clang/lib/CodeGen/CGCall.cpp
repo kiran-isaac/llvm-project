@@ -3786,6 +3786,8 @@ llvm::Value *CodeGenFunction::EmitCMSEClearRecord(llvm::Value *Src,
 void CodeGenFunction::EmitFunctionEpilog(const CGFunctionInfo &FI,
                                          bool EmitRetDbgLoc,
                                          SourceLocation EndLoc) {
+  if (Builder.GetInsertBlock() == nullptr) return;
+  
   if (FI.isNoReturn()) {
     // Noreturn functions don't return.
     EmitUnreachable(EndLoc);
