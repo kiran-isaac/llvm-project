@@ -15,6 +15,11 @@ tablegen(LLVM BoingusGenSubtargetInfo.inc -gen-subtarget)
 add_public_tablegen_target(BoingusCommonTableGen)
 
 add_llvm_target(BoingusCodeGen
+  BoingusFrameLowering.cpp
+  BoingusInstrInfo.cpp
+  BoingusISelLowering.cpp
+  BoingusRegisterInfo.cpp
+  BoingusSubtarget.cpp
   BoingusTargetMachine.cpp
 
   LINK_COMPONENTS

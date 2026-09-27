@@ -34,8 +34,8 @@ static MCInstrInfo *createBoingusMCInstrInfo() {
 
 static MCRegisterInfo *createBoingusMCRegisterInfo(const Triple &TT) {
   auto *X = new MCRegisterInfo();
-  // TODO: second argument is the return-address register.
-  InitBoingusMCRegisterInfo(X, Boingus::R1);
+  // Second argument is the return-address register.
+  InitBoingusMCRegisterInfo(X, Boingus::LR);
   return X;
 }
 
