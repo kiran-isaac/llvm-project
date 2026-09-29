@@ -144,27 +144,27 @@ condition, in the same order as the `rru16` branches: EQ, NE, LT, GE, LTU, GEU
 | LD8 | (01)00 0000 00(r, a, i) | r = byte at a + i | rest of r is zeroed; i is signed (±2 KiB) |
 | LD16 | (01)00 0000 01(r, a, i) | r = half-word at a + (i << 1) | rest of r is zeroed; i is signed (±4 KiB) |
 | LD32 | (01)00 0000 10(r, a, i) | r = word at a + (i << 2) | i is signed (±8 KiB) |
-| ST32 | (01)00 0001 00(n, a, i) | word at a + (i << 2) = n | i is signed (±8 KiB) |
-| ST8 | (01)00 0001 01(n, a, i) | byte at a + i = low 8 bits of n | i is signed (±2 KiB) |
-| ST16 | (01)00 0001 10(n, a, i) | half-word at a + (i << 1) = low 16 bits of n | i is signed (±4 KiB) |
+| ST8 | (01)00 0001 00(n, a, i) | byte at a + i = low 8 bits of n | i is signed (±2 KiB) |
+| ST16 | (01)00 0001 01(n, a, i) | half-word at a + (i << 1) = low 16 bits of n | i is signed (±4 KiB) |
+| ST32 | (01)00 0001 10(n, a, i) | word at a + (i << 2) = n | i is signed (±8 KiB) |
 
 #### rru16 : 10
 | Mnemonic | Sub-encoding | What it does | Notes |
 |---|---|---|---|
-| ADD | (10)0000(r, n, i) | r = n + i | wrapping |
-| SUB | (10)0001(r, n, i) | r = n - i | wrapping |
-| AND | (10)0010(r, n, i) | r = n & i | the top 16 bits of r are cleared |
-| OR | (10)0011(r, n, i) | r = n \| i | the top 16 bits of n pass through |
-| XOR | (10)0100(r, n, i) | r = n ^ i | the top 16 bits of n pass through |
-| LSL | (10)0101(r, n, i) | r = n << i | uses the low 5 bits of i |
-| LSR | (10)0110(r, n, i) | r = n >> i | logical (fills with 0); uses the low 5 bits of i |
-| ASR | (10)0111(r, n, i) | r = n >> i | arithmetic (fills with copies of bit 31); uses the low 5 bits of i |
-| BEQ | (10)1000(n, m, i) | if n == m, jump to PC + (i << 2) | i is signed (±128 KiB) |
-| BNE | (10)1001(n, m, i) | if n != m, jump to PC + (i << 2) | i is signed (±128 KiB) |
-| BLT | (10)1010(n, m, i) | if n < m, jump to PC + (i << 2) | signed compare; i is signed (±128 KiB) |
-| BGE | (10)1011(n, m, i) | if n >= m, jump to PC + (i << 2) | signed compare; i is signed (±128 KiB) |
-| BLTU | (10)1100(n, m, i) | if n < m, jump to PC + (i << 2) | unsigned compare; i is signed (±128 KiB) |
-| BGEU | (10)1101(n, m, i) | if n >= m, jump to PC + (i << 2) | unsigned compare; i is signed (±128 KiB) |
+| ADD | (10)00 00(r, n, i) | r = n + i | wrapping |
+| SUB | (10)00 01(r, n, i) | r = n - i | wrapping |
+| AND | (10)00 10(r, n, i) | r = n & i | the top 16 bits of r are cleared |
+| OR | (10)00 11(r, n, i) | r = n \| i | the top 16 bits of n pass through |
+| XOR | (10)01 00(r, n, i) | r = n ^ i | the top 16 bits of n pass through |
+| LSL | (10)01 01(r, n, i) | r = n << i | uses the low 5 bits of i |
+| LSR | (10)01 10(r, n, i) | r = n >> i | logical (fills with 0); uses the low 5 bits of i |
+| ASR | (10)01 11(r, n, i) | r = n >> i | arithmetic (fills with copies of bit 31); uses the low 5 bits of i |
+| BEQ | (10)10 00(n, m, A) | if n == m, jump to PC + (A << 2) | A is signed (±128 KiB) |
+| BNE | (10)10 01(n, m, A) | if n != m, jump to PC + (A << 2) | A is signed (±128 KiB) |
+| BLT | (10)10 10(n, m, A) | if n < m, jump to PC + (A << 2) | signed compare; A is signed (±128 KiB) |
+| BGE | (10)10 11(n, m, A) | if n >= m, jump to PC + (A << 2) | signed compare; A is signed (±128 KiB) |
+| BLTU | (10)11 00(n, m, A) | if n < m, jump to PC + (A << 2) | unsigned compare; A is signed (±128 KiB) |
+| BGEU | (10)11 01(n, m, A) | if n >= m, jump to PC + (A << 2) | unsigned compare; A is signed (±128 KiB) |
 
 #### ru16u5 : 110
 | Mnemonic | Sub-encoding | What it does | Notes |
@@ -174,8 +174,8 @@ condition, in the same order as the `rru16` branches: EQ, NE, LT, GE, LTU, GEU
 | ORSH | (110)010(r, i, o) | r = r \| (i << o) | |
 | ADR | (110)011(r, i, o) | r = PC + (i << o) | PC-relative address; i is signed, so it can point backwards |
 
-#### j28 : 111
+#### u28 : 111
 | Mnemonic | Sub-encoding | What it does | Notes |
 |---|---|---|---|
-| B | (111)0(i) | jump to PC + (i << 2) | i is signed |
-| BL | (111)1(i) | LR = PC + 4, then jump to PC + (i << 2) | function call; i is signed |
+| B | (111)0(i) | jump to PC + (A << 2) | A is signed |
+| BL | (111)1(i) | LR = PC + 4, then jump to PC + (A << 2) | function call; A is signed |
