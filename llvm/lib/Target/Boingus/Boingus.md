@@ -108,20 +108,25 @@ except offsets (loads, stores, branches, jumps, `ADR`), which are signed. Mnemon
 |---|---|---|---|
 | ADD | (000)0 0000 0000 0000 0(r, n, m) | r = n + m | wrapping |
 | SUB | (000)0 0000 0000 0000 1(r, n, m) | r = n - m | wrapping |
-| LSL | (000)0 0000 0000 0001 0(r, n, m) | r = n << m | logical shift left (fills with 0); uses the low 5 bits of m |
-| LSR | (000)0 0000 0000 0001 1(r, n, m) | r = n >> m | logical shift right (fills with 0); uses the low 5 bits of m |
-| AND | (000)0 0000 0000 0010 0(r, n, m) | r = n & m | |
-| OR | (000)0 0000 0000 0010 1(r, n, m) | r = n \| m | |
-| XOR | (000)0 0000 0000 0011 0(r, n, m) | r = n ^ m | |
+| AND | (000)0 0000 0000 0001 0(r, n, m) | r = n & m | |
+| OR | (000)0 0000 0000 0001 1(r, n, m) | r = n \| m | |
+| XOR | (000)0 0000 0000 0010 0(r, n, m) | r = n ^ m | |
+| LSL | (000)0 0000 0000 0010 1(r, n, m) | r = n << m | logical shift left (fills with 0); uses the low 5 bits of m |
+| LSR | (000)0 0000 0000 0011 0(r, n, m) | r = n >> m | logical shift right (fills with 0); uses the low 5 bits of m |
+| ASR | (000)0 0000 0000 0011 1(r, n, m) | r = n >> m | arithmetic shift right (fills with copies of bit 31); uses the low 5 bits of m |
 | LD64 | (000)0 0000 0000 0100 0(r, n, a) | r = word at a, n = word at (a + 4) | little endian: r gets the low half, n the high half |
 | ST64 | (000)0 0000 0000 0100 1(r, n, a) | word at a = r, word at (a + 4) = n | little endian: r is the low half, n the high half |
-| ASR | (000)0 0000 0000 0101 0(r, n, m) | r = n >> m | arithmetic shift right (fills with copies of bit 31); uses the low 5 bits of m |
 | SEQ | (000)0 0000 0010 0000 0(r, n, m) | r = 1 if n == m, else 0 |  |
 | SNE | (000)0 0000 0010 0000 1(r, n, m) | r = 1 if n != m, else 0 |  |
 | SLT | (000)0 0000 0010 0001 0(r, n, m) | r = 1 if n < m, else 0 | signed compare |
 | SGE | (000)0 0000 0010 0001 1(r, n, m) | r = 1 if n >= m, else 0 | signed compare |
 | SLTU | (000)0 0000 0010 0010 0(r, n, m) | r = 1 if n < m, else 0 | unsigned compare |
 | SGEU | (000)0 0000 0010 0010 1(r, n, m) | r = 1 if n >= m, else 0 | unsigned compare |
+
+The eight arithmetic and logical operations use the same three-bit opcode as
+their `rru16` forms. In the 14-bit `rrr` sub-encoding, that opcode is
+prefixed with eleven zero bits. `LD64` and `ST64` then use the rrr-only
+opcodes 8 and 9.
 
 Comparisons use their own block of 8 sub-encodings (64–71). The low 3 bits give the
 condition, in the same order as the `rru16` branches: EQ, NE, LT, GE, LTU, GEU
@@ -136,7 +141,7 @@ condition, in the same order as the `rru16` branches: EQ, NE, LT, GE, LTU, GEU
 | SX16 | (001)0 0000 0000 0000 0000 10(r, n) | r = low 16 bits of n, sign-extended | bits 31:16 copy bit 15 |
 | ZX8 | (001)0 0000 0000 0000 0000 11(r, n) | r = low 8 bits of n, zero-extended | bits 31:8 are 0 |
 | ZX16 | (001)0 0000 0000 0000 0001 00(r, n) | r = low 16 bits of n, zero-extended | bits 31:16 are 0 |
-| BLR | (001)0 0000 0000 0000 0001 01(r, n) | r = PC + 4, then jump to the address in n | call through a register; `BR n` = `BLR ZERO, n`, `RET` = `BLR ZERO, LR` |
+| BL | (001)0 0000 0000 0000 0001 01(r, n) | r = PC + 4, then jump to the address in n | call through a register; `BR n` = `BL ZERO, n`, `RET` = `BL ZERO, LR` |
 
 #### rru12 : 01
 | Mnemonic | Sub-encoding | What it does | Notes |

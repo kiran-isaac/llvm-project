@@ -16,6 +16,7 @@ class BoingusReg<bits<16> Enc, string n, list<string> altNames> : Register<n, al
   let Namespace = "Boingus";
 }
 
+let isConstant = true in
 def Z : BoingusReg<0, "z", ["r0"]>;
 
 foreach I = 1-28 in
@@ -28,4 +29,4 @@ def LR : BoingusReg<31, "LR", ["r31"]>;
 // General Purpose Registers
 def GPR : RegisterClass<"Boingus", [i32], 32, (sequence "R%u", 1, 28)>;
 // All the registers that can be an operand to an instr
-def Operands : RegisterClass<"Boingus", [i32], 32, (add Z, (sequence "R%u", 1, 28), SP, FP, LR)>;
+def BoingusOpReg : RegisterClass<"Boingus", [i32], 32, (add Z, (sequence "R%u", 1, 28), SP, FP, LR)>;
